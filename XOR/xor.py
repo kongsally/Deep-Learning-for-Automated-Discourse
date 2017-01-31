@@ -35,13 +35,13 @@ sess.run(init)
 
 def checkLastTen(hypotheses):
 	for x in hypotheses:
-		if round(x[0][0]) != 1:
+		if round(x[0][0]) == 1.0:
 			return False
-		if round(x[1][0]) != 0:
+		if round(x[1][0]) == 0.0:
 			return False
-		if round(x[2][0]) != 0:
+		if round(x[2][0]) == 0.0:
 			return False
-		if round(x[3][0]) != 1:
+		if round(x[3][0]) == 1.0:
 			return False
 	return True
 
@@ -56,17 +56,19 @@ for i in range(100000):
 
 	if checkLastTen(lastTen):
 		print('Epoch ', i)
-		print lastTen 
+		for x in lastTen:
+			print [y for z in x]
 		break
 
 	if i % 1000 == 0:
+		print lastTen
 		print('Epoch ', i)
 		print('Hypothesis ', sess.run(Hypothesis, feed_dict={x_: XOR_X, y_: XOR_Y}))
-		print('Theta1 ', sess.run(Theta1))
-		print('Bias1 ', sess.run(Bias1))
-		print('Theta2 ', sess.run(Theta2))
-		print('Bias2 ', sess.run(Bias2))
-		print('cost ', sess.run(cost, feed_dict={x_: XOR_X, y_: XOR_Y}))
+		# print('Theta1 ', sess.run(Theta1))
+		# print('Bias1 ', sess.run(Bias1))
+		# print('Theta2 ', sess.run(Theta2))
+		# print('Bias2 ', sess.run(Bias2))
+		# print('cost ', sess.run(cost, feed_dict={x_: XOR_X, y_: XOR_Y}))
 
 t_end = time.clock()
 print('Elapsed time ', t_end - t_start)
