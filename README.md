@@ -19,6 +19,7 @@
 	|:------------------------:|:---------------------------:|:-------:|
 	|2 Sigmoids + Reduce Mean| 94.1s | 50420|
 	|ReLU + Sigmoid + Reduce Mean| 1.53s (when lucky) | 757
+	|2 Sigmoid + Square Mean| 9.41s | 5758
 	
 	* The recorded elapsed time and epoch are the time and epoch that took the model to make 10 conescutive correct hypotheses
 	* The second model only took 1.53 at times, but there were also times when it would not have converged while the first model was much more consistent. 
