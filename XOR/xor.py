@@ -57,7 +57,7 @@ for i in range(100000):
 	if checkLastTen(lastTen):
 		print('Epoch ', i)
 		for x in lastTen:
-			print [y for z in x]
+			print [y[0] for y in x]
 		break
 
 	if i % 1000 == 0:
