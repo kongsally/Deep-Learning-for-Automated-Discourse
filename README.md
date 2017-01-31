@@ -24,9 +24,13 @@
 	* The second model only took 1.53 at times, but there were also times when it would not have converged while the first model was much more consistent. 
 
 * Seq2Seq: A seq2seq model to translate from English to French. First you would need to download the necessary english and french data, tokenize it, then train the model. This could be done by:
+
 ```
 $ python translate.py
-``` Afterwards to try out the interactive decode mode by:
+``` 
+
+Afterwards to try out the interactive decode mode by:
+
 ```
 $ python translate.py --decode
 ```
