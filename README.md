@@ -60,25 +60,13 @@ $ python converse.py --decode
 
 Then we imported the functions for setting up the model and decoding in converse.py to [chatbot.py](https://github.com/kongsally/Deep-Learning-for-Automated-Discourse/tree/master/FirstChatbot/chatbot.py) which is a simple flask app that integrates with Alexa using [flask-ask](https://github.com/johnwheeler/flask-ask)
 
-you should show some qualitative examples as well as train and test loss
+##### Evaluation
 
-In regards to evaluating our chatbot, one possible interesting idea was to generate the top 5 best responses and choose the best or all wrong.
+As of now, we have been manually testing our chatbot's performance every 50 steps of training. It still seems to respond with repeating high scoring words such as:
 
-In addition, manual human evaluation was proposed often as a framework for evaluation of responses.
+- Human: How are you?
+- Bot: fitness fitness fitness fitness fitness dumps
 
-The Neural Conversational model paper used huamn evaluation by comparing their mode against CleverBot, using 200 questions and 4 humans to rate their preferred bot. That approach used crowdsourcing of sorts, and though we did not use crowdsourcing, we relied on our feelings about the responses.
+Once our model is trained with more steps and respond with more cohesive sentences, we plan to generate the top 5 best responses then designing Human Intelligence Tasks to choose the best response or indicate that all responses are wrong. This is a simlar approach to the Neural Conversational model paper where they used huamn evaluation to compare their mode against CleverBot. This experiment used 200 questions and 4 humans to rate their preferred bot. 
 
-Some sample conversations, like Conversation 1: Basic, from Neural Conversational model, served as good baselines for our model.
 
-From the paper:
-Human: hello !
-Machine: hello !
-Human: how are you ?
-Machine: i ’m good .
-Human: what ’s your name ?
-Machine: i ’m julia .
-Human: when were you born ?
-Machine: july 20th .
-Human: what year were you born ?
-Machine: 1977 .
-Human: where are you from ?
