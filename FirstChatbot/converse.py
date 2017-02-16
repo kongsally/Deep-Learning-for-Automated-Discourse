@@ -78,7 +78,7 @@ FLAGS = tf.app.flags.FLAGS
 
 # We use a number of buckets and pad to the closest one for efficiency.
 # See seq2seq_model.Seq2SeqModel for details of how they work.
-_buckets = [(5,5), (10, 10), (15, 15), (20, 20)]
+_buckets = [(1,1), (1,3), (1, 5), (1,8)]
 
 
 def read_data(source_path, target_path, max_size=None):
@@ -301,12 +301,12 @@ def interactive_decode():
 
     # Load vocabularies.
     en_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "vocab%d.en" % FLAGS.from_vocab_size)
+                                 "twitter_vocab.txt")
     fr_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "vocab%d.fr" % FLAGS.to_vocab_size)
+                                 "twitter_vocab.txt")
     en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path)
     _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path)
-
+   
     # Decode from standard input.
     sys.stdout.write("> ")
     sys.stdout.flush()
