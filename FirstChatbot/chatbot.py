@@ -16,7 +16,7 @@ sess = tf.Session()
 
 @ask.launch
 def launch():
-    speech_text = 'Welcome. How are you?'
+    speech_text = "Hi, I'm a chitty chatbot. Wanna chat?"
     return question(speech_text).reprompt(speech_text)
 
 @ask.intent("AnswerIntent", mapping={'utterance':'Text'})
