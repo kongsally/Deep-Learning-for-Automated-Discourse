@@ -247,8 +247,7 @@ def train():
           print("  eval: bucket %d perplexity %.2f" % (bucket_id, eval_ppx))
         sys.stdout.flush()
 
-def decode(user_input):
-  with tf.Session() as sess:
+def decode_init(sess):
     # Create model and load parameters.
     model = create_model(sess, True)
     model.batch_size = 1  # We decode one sentence at a time.
@@ -260,7 +259,9 @@ def decode(user_input):
                                  "twitter_vocab.txt")
     en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path)
     _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path)
+    return (model, fr_vocab_path, en_vocab, rev_fr_vocab, sess)
 
+def decode(user_input, model, en_vocab, rev_fr_vocab, sess):
     # Decode from standard input.
     sys.stdout.write("> ")
     sys.stdout.flush()
