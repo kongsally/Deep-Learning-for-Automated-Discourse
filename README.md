@@ -48,10 +48,9 @@ We modified the Seq2Seq model from HW2 so that the settings will match the [Neur
 
 The model configuration and training code could be found in [FirstChatbot/converse.py](https://github.com/kongsally/Deep-Learning-for-Automated-Discourse/tree/master/FirstChatbot/converse.py)
 
-you can train it by running  
-```
-$ python converse.py
-``` 
+The data came from [this repo](https://github.com/suriyadeepan/datasets/tree/master/seq2seq/twitter), which credited [another repo](https://github.com/Marsan-Ma/chat_corpus/) by another user, who also provided a [seq2seq training implementation](https://github.com/Marsan-Ma/tf_chatbot_seq2seq_antilm) for format of the Twitter data.
+
+You can train it by following instructions to train on [this repo](https://github.com/Marsan-Ma/tf_chatbot_seq2seq_antilm)
 
 And try out the interactive decode mode by:
  ```
