@@ -40,6 +40,7 @@ $ python translate.py --decode
 
 ####HW3: First Chatbot (Seq2Seq + Twitter Corpus + Alexa)
 
+##### Implementation
 We modified the Seq2Seq model from HW2 so that the settings will match the [Neural Conversational Model](https://github.com/kongsally/Deep-Learning-for-Automated-Discourse/blob/master/Readings/Neural%20Conversational%20Model.pdf):
 
 * Single layer LSTM with 1024 memory cells 
