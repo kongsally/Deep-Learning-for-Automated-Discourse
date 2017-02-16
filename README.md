@@ -11,7 +11,7 @@
 
 
 
-#####HW2: Tensorflow Tutorials
+#####HW2: Seq2Seq Tensorflow Tutorials
 * XOR: Training a XOR model on Tensorflow. Ran experiments where we modified the activation functions and loss functions on [this implemention of xor.py](https://github.com/StephenOman/TensorFlowExamples/blob/master/xor%20nn/xor_nn.py) 
 
 	
@@ -37,3 +37,23 @@ $ python translate.py --decode
 ```
 
 * Ran 550 steps which resulted to a step-time 3.87 perplexity 411.19. The model paramters could be found in [Seq2Seq/checkpoint/](https://github.com/kongsally/Deep-Learning-for-Automated-Discourse/tree/master/Seq2Seq/checkpoint) and the output of checkpoints could be found in [Seq2Seq/perplexitiy_outputs](https://github.com/kongsally/Deep-Learning-for-Automated-Discourse/tree/master/Seq2Seq/perplexity_outputs)
+
+#####HW3: First Chatbot (Seq2Seq + Twitter Corpus + Alexa)
+
+We modified the Seq2Seq model from HW2 so that the settings will match the [Neural Conversational Model](https://github.com/kongsally/Deep-Learning-for-Automated-Discourse/blob/master/Readings/Neural%20Conversational%20Model.pdf):
+
+* Single layer LSTM with 1024 memory cells 
+* Stochastic gradient descent with gradient clipping 
+* Vocabulary consists of the most common 20K words 
+
+The model configuration and training code could be found in [FirstChatbot/converse.py](https://github.com/kongsally/Deep-Learning-for-Automated-Discourse/tree/master/FirstChatbot/converse.py)
+
+you can train it by running  ```
+$ python converse.py
+``` 
+
+And try out the interactive decode mode by: ```
+$ python converse.py --decode
+```
+
+Then we imported the functions for setting up the model and decoding in converse.py to [chatbot.py](https://github.com/kongsally/Deep-Learning-for-Automated-Discourse/tree/master/FirstChatbot/chatbot.py) which is a simple flask app that integrates with Alexa using [flask-ask](https://github.com/johnwheeler/flask-ask)
