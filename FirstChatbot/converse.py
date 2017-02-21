@@ -304,9 +304,9 @@ def interactive_decode():
 
     # Load vocabularies.
     en_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "twitter_vocab.txt")
+                                 "vocab20000.from")
     fr_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "twitter_vocab.txt")
+                                 "vocab20000.to")
     en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path)
     _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path)
    
