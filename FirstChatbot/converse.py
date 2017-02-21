@@ -53,8 +53,8 @@ tf.app.flags.DEFINE_float("max_gradient_norm", 5.0,
                           "Clip gradients to this norm.")
 tf.app.flags.DEFINE_integer("batch_size", 64,
                             "Batch size to use during training.")
-tf.app.flags.DEFINE_integer("size", 1024, "Size of each model layer.")
-tf.app.flags.DEFINE_integer("num_layers", 1, "Number of layers in the model.")
+tf.app.flags.DEFINE_integer("size", 256, "Size of each model layer.")
+tf.app.flags.DEFINE_integer("num_layers", 3, "Number of layers in the model.")
 tf.app.flags.DEFINE_integer("from_vocab_size", 20000, "English vocabulary size.")
 tf.app.flags.DEFINE_integer("to_vocab_size", 20000, "French vocabulary size.")
 tf.app.flags.DEFINE_string("data_dir", "data/", "Data directory")
@@ -157,7 +157,6 @@ def checkFlagPathsExist():
     os.path.exists(FLAGS.to_dev_data))
 
 def train():
-  """Train a en->fr translation model using WMT data."""
   from_train = None
   to_train = None
   from_dev = None
@@ -170,6 +169,10 @@ def train():
 
   from_train, to_train, from_dev, to_dev, _, _ = data_utils.prepare_data(
         FLAGS.data_dir,
+        from_train_data,
+        to_train_data,
+        from_dev_data,
+        to_dev_data,
         FLAGS.from_vocab_size,
         FLAGS.to_vocab_size)
   # else:
