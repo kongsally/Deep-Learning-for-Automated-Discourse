@@ -68,6 +68,12 @@ As of now, we have been manually testing our chatbot's performance every 50 step
 - Human: How are you?
 - Bot: fitness fitness fitness fitness fitness dumps
 
-Once our model is trained with more steps and respond with more cohesive sentences, we plan to generate the top 5 best responses then designing Human Intelligence Tasks to choose the best response or indicate that all responses are wrong. This is a simlar approach to the Neural Conversational model paper where they used huamn evaluation to compare their mode against CleverBot. This experiment used 200 questions and 4 humans to rate their preferred bot. 
+After around 4000 steps, the responses seem better. Here are some of our favorite responses:
+
+|!["should I get a tattoo?"](./imgs/tattoo.png)|!["who are you?"](./imgs/who-are-you.png) 
+|!["game over bro"](./imgs/game-over.png)|!["dope"](./imgs/dope.png)
+
+
+For further evaluation, we plan to generate the top 5 best responses then designing Human Intelligence Tasks to choose the best response or indicate that all responses are wrong. This is a simlar approach to the Neural Conversational model paper where they used huamn evaluation to compare their mode against CleverBot. This experiment used 200 questions and 4 humans to rate their preferred bot. 
 
 
