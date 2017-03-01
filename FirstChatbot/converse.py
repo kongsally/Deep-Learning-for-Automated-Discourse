@@ -46,7 +46,7 @@ import data_utils
 import seq2seq_model
 
 
-tf.app.flags.DEFINE_float("learning_rate", 0.7, "Learning rate.")
+tf.app.flags.DEFINE_float("learning_rate", 0.8, "Learning rate.")
 tf.app.flags.DEFINE_float("learning_rate_decay_factor", 0.99,
                           "Learning rate decays by this much.")
 tf.app.flags.DEFINE_float("max_gradient_norm", 5.0,
@@ -58,7 +58,7 @@ tf.app.flags.DEFINE_integer("num_layers", 1, "Number of layers in the model.")
 tf.app.flags.DEFINE_integer("from_vocab_size", 20000, "English vocabulary size.")
 tf.app.flags.DEFINE_integer("to_vocab_size", 20000, "French vocabulary size.")
 tf.app.flags.DEFINE_string("data_dir", "data/", "Data directory")
-tf.app.flags.DEFINE_string("train_dir", "checkpoint/", "Training directory.")
+tf.app.flags.DEFINE_string("train_dir", "checkpoint_dir/", "Training directory.")
 tf.app.flags.DEFINE_string("from_train_data", "data/twitter_q.txt", "Training data.")
 tf.app.flags.DEFINE_string("to_train_data", "data/twitter_a.txt", "Training data.")
 tf.app.flags.DEFINE_string("from_dev_data", "data/twitter_q.txt", "Training data.")
@@ -157,7 +157,6 @@ def checkFlagPathsExist():
     os.path.exists(FLAGS.to_dev_data))
 
 def train():
-  """Train a en->fr translation model using WMT data."""
   from_train = None
   to_train = None
   from_dev = None
@@ -170,6 +169,10 @@ def train():
 
   from_train, to_train, from_dev, to_dev, _, _ = data_utils.prepare_data(
         FLAGS.data_dir,
+        from_train_data,
+        to_train_data,
+        from_dev_data,
+        to_dev_data,
         FLAGS.from_vocab_size,
         FLAGS.to_vocab_size)
   # else:
@@ -301,9 +304,9 @@ def interactive_decode():
 
     # Load vocabularies.
     en_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "twitter_vocab.txt")
+                                 "vocab20000.from")
     fr_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "twitter_vocab.txt")
+                                 "vocab20000.to")
     en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path)
     _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path)
    
