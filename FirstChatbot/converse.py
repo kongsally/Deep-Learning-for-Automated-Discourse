@@ -45,6 +45,8 @@ import tensorflow as tf
 import data_utils
 import seq2seq_model
 
+import grammar_check
+tool = grammar_check.LanguageTool('en-GB')
 
 tf.app.flags.DEFINE_float("learning_rate", 0.8, "Learning rate.")
 tf.app.flags.DEFINE_float("learning_rate_decay_factor", 0.99,
@@ -55,8 +57,8 @@ tf.app.flags.DEFINE_integer("batch_size", 64,
                             "Batch size to use during training.")
 tf.app.flags.DEFINE_integer("size", 1024, "Size of each model layer.")
 tf.app.flags.DEFINE_integer("num_layers", 1, "Number of layers in the model.")
-tf.app.flags.DEFINE_integer("from_vocab_size", 20000, "English vocabulary size.")
-tf.app.flags.DEFINE_integer("to_vocab_size", 20000, "French vocabulary size.")
+tf.app.flags.DEFINE_integer("from_vocab_size", 8000, "English vocabulary size.")
+tf.app.flags.DEFINE_integer("to_vocab_size", 8000, "French vocabulary size.")
 tf.app.flags.DEFINE_string("data_dir", "data/", "Data directory")
 tf.app.flags.DEFINE_string("train_dir", "checkpoint_dir/", "Training directory.")
 tf.app.flags.DEFINE_string("from_train_data", "data/twitter_q.txt", "Training data.")
@@ -257,9 +259,9 @@ def decode_init(sess):
 
     # Load vocabularies.
     en_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "twitter_vocab.txt")
+                                 "vocab8000.from")
     fr_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "twitter_vocab.txt")
+                                 "vocab8000.to")
     en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path)
     _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path)
     return (model, fr_vocab_path, en_vocab, rev_fr_vocab, sess)
@@ -304,12 +306,12 @@ def interactive_decode():
 
     # Load vocabularies.
     en_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "vocab20000.from")
+                                 "vocab8000.from")
     fr_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "vocab20000.to")
+                                 "vocab8000.to")
     en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path)
     _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path)
-   
+
     # Decode from standard input.
     sys.stdout.write("> ")
     sys.stdout.flush()
@@ -323,8 +325,8 @@ def interactive_decode():
         if bucket[0] >= len(token_ids):
           bucket_id = i
           break
-      else:
-        logging.warning("Sentence truncated: %s", sentence)
+    #   else:
+    #     logging.warning("Sentence truncated: %s", sentence)
 
       # Get a 1-element batch to feed the sentence to the model.
       encoder_inputs, decoder_inputs, target_weights = model.get_batch(
@@ -338,7 +340,11 @@ def interactive_decode():
       if data_utils.EOS_ID in outputs:
         outputs = outputs[:outputs.index(data_utils.EOS_ID)]
       # Print out French sentence corresponding to outputs.
-      print(" ".join([tf.compat.as_str(rev_fr_vocab[output]) for output in outputs]))
+      text = " ".join([tf.compat.as_str(rev_fr_vocab[output]) for output in outputs])
+      matches = tool.check(text)
+      if len(matches):
+          text = grammar_check.correct(text, matches)
+      print(text)
       print("> ", end="")
       sys.stdout.flush()
       sentence = sys.stdin.readline()
