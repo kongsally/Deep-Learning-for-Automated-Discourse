@@ -48,7 +48,7 @@ import seq2seq_model
 import grammar_check
 tool = grammar_check.LanguageTool('en-GB')
 
-tf.app.flags.DEFINE_float("learning_rate", 0.8, "Learning rate.")
+tf.app.flags.DEFINE_float("learning_rate", 0.2, "Learning rate.")
 tf.app.flags.DEFINE_float("learning_rate_decay_factor", 0.99,
                           "Learning rate decays by this much.")
 tf.app.flags.DEFINE_float("max_gradient_norm", 5.0,
@@ -56,31 +56,31 @@ tf.app.flags.DEFINE_float("max_gradient_norm", 5.0,
 tf.app.flags.DEFINE_integer("batch_size", 64,
                             "Batch size to use during training.")
 tf.app.flags.DEFINE_integer("size", 1024, "Size of each model layer.")
-tf.app.flags.DEFINE_integer("num_layers", 1, "Number of layers in the model.")
+tf.app.flags.DEFINE_integer("num_layers", 2, "Number of layers in the model.")
 tf.app.flags.DEFINE_integer("from_vocab_size", 8000, "English vocabulary size.")
 tf.app.flags.DEFINE_integer("to_vocab_size", 8000, "French vocabulary size.")
 tf.app.flags.DEFINE_string("data_dir", "data/", "Data directory")
-tf.app.flags.DEFINE_string("train_dir", "checkpoint_dir/", "Training directory.")
-tf.app.flags.DEFINE_string("from_train_data", "data/twitter_q.txt", "Training data.")
-tf.app.flags.DEFINE_string("to_train_data", "data/twitter_a.txt", "Training data.")
-tf.app.flags.DEFINE_string("from_dev_data", "data/twitter_q.txt", "Training data.")
-tf.app.flags.DEFINE_string("to_dev_data", "data/twitter_a.txt", "Training data.")
-tf.app.flags.DEFINE_integer("max_train_data_size", 7000000,
+tf.app.flags.DEFINE_string("train_dir", "checkpoint/", "Training directory.")
+tf.app.flags.DEFINE_string("from_train_data", "data/train.enc", "Training data.")
+tf.app.flags.DEFINE_string("to_train_data", "data/train.dec", "Training data.")
+tf.app.flags.DEFINE_string("from_dev_data", "data/test.enc", "Training data.")
+tf.app.flags.DEFINE_string("to_dev_data", "data/test.dec", "Training data.")
+tf.app.flags.DEFINE_integer("max_train_data_size", 0,
                             "Limit on the size of training data (0: no limit).")
-tf.app.flags.DEFINE_integer("steps_per_checkpoint", 50,
+tf.app.flags.DEFINE_integer("steps_per_checkpoint", 100,
                             "How many training steps to do per checkpoint.")
 tf.app.flags.DEFINE_boolean("decode", False,
                             "Set to True for interactive decoding.")
 tf.app.flags.DEFINE_boolean("self_test", False,
                             "Run a self-test if this is set to True.")
-tf.app.flags.DEFINE_boolean("use_fp16", False,
+tf.app.flags.DEFINE_boolean("use_fp16", True,
                             "Train using fp16 instead of fp32.")
 
 FLAGS = tf.app.flags.FLAGS
 
 # We use a number of buckets and pad to the closest one for efficiency.
 # See seq2seq_model.Seq2SeqModel for details of how they work.
-_buckets = [(1,3), (3,5), (5,7)]
+_buckets = [(1,3), (3,5), (5,7), (7, 10)]
 
 
 def read_data(source_path, target_path, max_size=None):
@@ -177,11 +177,14 @@ def train():
         to_dev_data,
         FLAGS.from_vocab_size,
         FLAGS.to_vocab_size)
-  # else:
-  #     # Prepare WMT data.
-  #     print("Preparing WMT data in %s" % FLAGS.data_dir)
-  #     from_train, to_train, from_dev, to_dev, _, _ = data_utils.prepare_wmt_data(
-  #         FLAGS.data_dir, FLAGS.from_vocab_size, FLAGS.to_vocab_size)
+  
+  # Load vocabularies.
+  en_vocab_path = os.path.join(FLAGS.data_dir,
+                               "vocab8000.from")
+  fr_vocab_path = os.path.join(FLAGS.data_dir,
+                               "vocab8000.to")
+  en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path)
+  _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path)
 
   with tf.Session() as sess:
     # Create model.
@@ -230,26 +233,20 @@ def train():
         print ("global step %d learning rate %.4f step-time %.2f perplexity "
                "%.2f" % (model.global_step.eval(), model.learning_rate.eval(),
                          step_time, perplexity))
+
+        # Save sample responses
+        print_samples(current_step, model, fr_vocab_path, en_vocab, rev_fr_vocab, sess)
+
         # Decrease learning rate if no improvement was seen over last 3 times.
         if len(previous_losses) > 2 and loss > max(previous_losses[-3:]):
           sess.run(model.learning_rate_decay_op)
         previous_losses.append(loss)
+
         # Save checkpoint and zero timer and loss.
         checkpoint_path = os.path.join(FLAGS.train_dir, "translate.ckpt")
         model.saver.save(sess, checkpoint_path, global_step=model.global_step)
         step_time, loss = 0.0, 0.0
-        # Run evals on development set and print their perplexity.
-        for bucket_id in xrange(len(_buckets)):
-          if len(dev_set[bucket_id]) == 0:
-            print("  eval: empty bucket %d" % (bucket_id))
-            continue
-          encoder_inputs, decoder_inputs, target_weights = model.get_batch(
-              dev_set, bucket_id)
-          _, eval_loss, _ = model.step(sess, encoder_inputs, decoder_inputs,
-                                       target_weights, bucket_id, True)
-          eval_ppx = math.exp(float(eval_loss)) if eval_loss < 300 else float(
-              "inf")
-          print("  eval: bucket %d perplexity %.2f" % (bucket_id, eval_ppx))
+
         sys.stdout.flush()
 
 def decode_init(sess):
@@ -268,11 +265,11 @@ def decode_init(sess):
 
 def decode(user_input, model, en_vocab, rev_fr_vocab, sess):
     # Decode from standard input.
-    sys.stdout.write("> ")
-    sys.stdout.flush()
     sentence = user_input
+    
     # Get token-ids for the input sentence.
     token_ids = data_utils.sentence_to_token_ids(tf.compat.as_bytes(sentence), en_vocab)
+
     # Which bucket does it belong to?
     bucket_id = len(_buckets) - 1
     for i, bucket in enumerate(_buckets):
@@ -288,14 +285,23 @@ def decode(user_input, model, en_vocab, rev_fr_vocab, sess):
     # Get output logits for the sentence.
     _, _, output_logits = model.step(sess, encoder_inputs, decoder_inputs,
                                      target_weights, bucket_id, True)
+    
+    output = ""
+
     # This is a greedy decoder - outputs are just argmaxes of output_logits.
-    outputs = [int(np.argmax(logit, axis=1)) for logit in output_logits]
+    outputs = [int(np.argmax(logit, axis=1)[0]) for logit in output_logits]
+    
     # If there is an EOS symbol in outputs, cut them at that point.
     if data_utils.EOS_ID in outputs:
       outputs = outputs[:outputs.index(data_utils.EOS_ID)]
-    # Print out French sentence corresponding to outputs.
+
+    # Print out corresponding outputs.
     output = " ".join([tf.compat.as_str(rev_fr_vocab[output]) for output in outputs])
-    print(output)
+    matches = tool.check(output)
+    if len(matches):
+        print("original: " + output)
+        output = grammar_check.correct(output, matches)
+        print("corrected: " + output)
     return output
 
 def interactive_decode():
@@ -325,25 +331,28 @@ def interactive_decode():
         if bucket[0] >= len(token_ids):
           bucket_id = i
           break
-    #   else:
-    #     logging.warning("Sentence truncated: %s", sentence)
-
+   
       # Get a 1-element batch to feed the sentence to the model.
       encoder_inputs, decoder_inputs, target_weights = model.get_batch(
           {bucket_id: [(token_ids, [])]}, bucket_id)
+
       # Get output logits for the sentence.
       _, _, output_logits = model.step(sess, encoder_inputs, decoder_inputs,
                                        target_weights, bucket_id, True)
       # This is a greedy decoder - outputs are just argmaxes of output_logits.
       outputs = [int(np.argmax(logit, axis=1)) for logit in output_logits]
+      
       # If there is an EOS symbol in outputs, cut them at that point.
       if data_utils.EOS_ID in outputs:
         outputs = outputs[:outputs.index(data_utils.EOS_ID)]
+      
       # Print out French sentence corresponding to outputs.
       text = " ".join([tf.compat.as_str(rev_fr_vocab[output]) for output in outputs])
       matches = tool.check(text)
       if len(matches):
-          text = grammar_check.correct(text, matches)
+        print("original: " + text)
+        text = grammar_check.correct(text, matches)
+        print("corrected: " + text)
       print(text)
       print("> ", end="")
       sys.stdout.flush()
@@ -368,7 +377,20 @@ def self_test():
       model.step(sess, encoder_inputs, decoder_inputs, target_weights,
                  bucket_id, False)
 
+def print_samples(checkpoint,model, fr_vocab_path, en_vocab, rev_fr_vocab, sess):
+  sample_file = open('dialogue_q', 'r')
+  sample_talk = sample_file.readlines()
+  sample_talk = [x.lower().strip() for x in sample_talk]
 
+  sample_dialogue = open('dialogue_a_' + str(checkpoint), 'w')
+
+  for q in sample_talk:
+    sample_dialogue.write(q + '\n')
+    chat_bot_response = decode(q, model, en_vocab, rev_fr_vocab, sess)
+    sample_dialogue.write(chat_bot_response + '\n');
+
+  sample_dialogue.close()
+  
 def main(_):
   if FLAGS.self_test:
     self_test()
