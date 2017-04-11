@@ -5,13 +5,11 @@ body {
 
 .section {
 	text-align: center;
-	border-bottom: 3px solid #34A8A5;
 }
 
 #header {
 	background-color: #C5E3ED;
 	color: white;
-	border:none;
 }
 
 #header h2 {

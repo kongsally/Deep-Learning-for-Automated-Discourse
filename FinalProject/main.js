@@ -29,7 +29,7 @@ function init() {
 }
 
 function loadDialogues(checkptNumber) {
-	$("#checkpointNumber").html(checkptNumber);
+	
 	$("#cornell").empty();
 	$("#twitter").empty();
 	$("#cornellTwitter").empty();
