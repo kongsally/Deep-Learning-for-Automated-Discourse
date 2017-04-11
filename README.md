@@ -87,3 +87,5 @@ After using the seq2seq model to generate a result, we also used pythons grammar
 #### Project: Milestone 1 (ADOS dataset + Seq2Seq)
 
 [Milestone 1 Analysis can be found here](./ExperimentChatbot/Milestone1.pdf)
+
+[Milestone 2 Model Comparison UI ](https://kongsally.github.io/Deep-Learning-for-Automated-Discourse/)
