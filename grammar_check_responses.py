@@ -34,8 +34,9 @@ def grammarCheckFile(filePath, checkpt):
 checkptNumbers = ["1000", "5000", "10000", "50000","100000", "120000"]
 
 for n in checkptNumbers:
-	grammarCheckFile(cornellPath, n)
+	# grammarCheckFile(cornellTwitterPath, n)
+	# grammarCheckFile(cornellPath, n)
 	grammarCheckFile(twitterPath, n)
-	grammarCheckFile(cornellTwitterPath, n)
+	
 
 
