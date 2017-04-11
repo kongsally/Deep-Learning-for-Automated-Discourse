@@ -1,0 +1,83 @@
+body {
+	margin: 0;
+	font-family: 'Roboto', sans-serif;
+}
+
+.section {
+	text-align: center;
+}
+
+#header {
+	background-color: #C5E3ED;
+	color: white;
+}
+
+#header h2 {
+	margin: 0;
+	padding: 1em;
+	color: #385960;
+}
+
+
+#checkpointNumber {
+	margin-right: 2em;
+}
+
+.button {
+  display: inline-block;
+  position: relative;
+  width: 120px;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 2px;
+  font-size: 0.9em;
+  background-color: #34A8A5;
+  color: #fff;
+  font-weight: 200;
+}
+
+.button:hover {
+	cursor: pointer;
+	color: #34A8A5;
+  	background-color: #fff;
+}
+
+.button.ui-selectee.ui-selected {
+	color: #34A8A5;
+  	background-color: #fff;
+}
+
+.wrapper {
+	padding: 2%;
+	display: flex;
+}
+
+.model-wrapper {
+	border: solid 3px #C5E3ED;
+	margin-right: 1em;
+	padding: 1em;
+}
+
+.wrapper div h3 {
+	padding: 1em;
+	text-align: center;
+}
+
+.wrapper div p {
+	flex: 1;
+	padding: 1%;
+}
+
+.question {
+	font-weight: 700;
+	margin-bottom: 0;
+}
+
+.answer {
+	margin-top: 0;
+}
+
+.properties {
+	color: #385960;
+	margin: 0;
+}

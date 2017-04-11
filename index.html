@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab" rel="stylesheet">
+<link rel="stylesheet" href="./main.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="./main.js"></script>
+</head>
+<body onload="init();">
+
+	<div id="header" class="section">
+		<h2> Seq2Seq w/ Attention </h2>
+	</div>
+
+	<div class="section">
+		<h3> Checkpoint Number: </h3>
+		<h3>
+			<ul id="selectable">
+				<div class="button" onclick="loadDialogues(1000);">
+				1000</div> 
+				<div class="button" onclick="loadDialogues(5000);">
+				5000</div> 
+				<div class="button" onclick="loadDialogues(10000);">10000</div> 
+				<div class="button" onclick="loadDialogues(50000);">50000</div>
+				<div class="button" onclick="loadDialogues(100000);">100000</div>
+				<div class="button" onclick="loadDialogues(120000);">120000</div>
+			</ul>
+		 </h3>
+	</div>
+
+	<div class="wrapper"> 
+		<div class="model-wrapper" id="cornellWrapper">
+			<h3> Cornell Movie-Dialogue 
+				<span id="cornellPerplexity"></span>
+			</h3>
+			<div id="cornell"></div>
+		</div>
+		<div class="model-wrapper" id="cornellTwitterWrapper">
+			<h3> Cornell Movie-Dialogue + Twitter 
+				<span id="cornellTwitterPerplexity"></span>
+			</h3>
+			<div id="cornellTwitter"></div>
+		</div>
+		<div class="model-wrapper" id="twitterWrapper">
+			<h3> Twitter 
+				<span id="twitterPerplexity"></span>
+			</h3>
+			<div id="twitter"></div>
+		</div>
+		
+	</div>
+
+</body>
+</html>

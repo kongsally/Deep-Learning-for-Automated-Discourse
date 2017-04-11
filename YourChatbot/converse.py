@@ -65,7 +65,7 @@ tf.app.flags.DEFINE_string("from_train_data", "data/train.enc", "Training data."
 tf.app.flags.DEFINE_string("to_train_data", "data/train.dec", "Training data.")
 tf.app.flags.DEFINE_string("from_dev_data", "data/test.enc", "Training data.")
 tf.app.flags.DEFINE_string("to_dev_data", "data/test.dec", "Training data.")
-tf.app.flags.DEFINE_integer("max_train_data_size", 0,
+tf.app.flags.DEFINE_integer("max_train_data_size", 7000000,
                             "Limit on the size of training data (0: no limit).")
 tf.app.flags.DEFINE_integer("steps_per_checkpoint", 100,
                             "How many training steps to do per checkpoint.")
@@ -80,7 +80,7 @@ FLAGS = tf.app.flags.FLAGS
 
 # We use a number of buckets and pad to the closest one for efficiency.
 # See seq2seq_model.Seq2SeqModel for details of how they work.
-_buckets = [(1,3), (3,5), (5,7), (7, 10)]
+_buckets = [(1,3), (3,5), (5,7)]
 
 
 def read_data(source_path, target_path, max_size=None):
