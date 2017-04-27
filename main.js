@@ -35,7 +35,6 @@ function loadDialogues(checkptNumber) {
 	$("#cornell2").empty();
 
 	loadText(cornell2Path, checkptNumber, "cornell2");
-
 	loadText(pos2Path, checkptNumber, "pos2");
 	loadText(pos3Path, checkptNumber, "pos3");
 	loadText(neg2Path, checkptNumber, "neg2");
