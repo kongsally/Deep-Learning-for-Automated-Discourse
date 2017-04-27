@@ -58,8 +58,8 @@ tf.app.flags.DEFINE_integer("batch_size", 64,
                             "Batch size to use during training.")
 tf.app.flags.DEFINE_integer("size", 1024, "Size of each model layer.")
 tf.app.flags.DEFINE_integer("num_layers", 2, "Number of layers in the model.")
-tf.app.flags.DEFINE_integer("from_vocab_size", 90000, "English vocabulary size.")
-tf.app.flags.DEFINE_integer("to_vocab_size", 90000, "French vocabulary size.")
+tf.app.flags.DEFINE_integer("from_vocab_size", 30000, "English vocabulary size.")
+tf.app.flags.DEFINE_integer("to_vocab_size", 30000, "French vocabulary size.")
 tf.app.flags.DEFINE_string("data_dir", "data/", "Data directory")
 tf.app.flags.DEFINE_string("train_dir", "checkpoint/", "Training directory.")
 tf.app.flags.DEFINE_string("from_train_data", "data/train.enc", "Training data.")
@@ -68,7 +68,7 @@ tf.app.flags.DEFINE_string("from_dev_data", "data/test.enc", "Training data.")
 tf.app.flags.DEFINE_string("to_dev_data", "data/test.dec", "Training data.")
 tf.app.flags.DEFINE_integer("max_train_data_size", 0,
                             "Limit on the size of training data (0: no limit).")
-tf.app.flags.DEFINE_integer("steps_per_checkpoint", 1000,
+tf.app.flags.DEFINE_integer("steps_per_checkpoint", 1,
                             "How many training steps to do per checkpoint.")
 tf.app.flags.DEFINE_boolean("decode", False,
                             "Set to True for interactive decoding.")
@@ -158,7 +158,7 @@ def checkFlagPathsExist():
     os.path.exists(FLAGS.from_dev_data) and \
     os.path.exists(FLAGS.to_dev_data))
 
-def train():
+def train(current_step):
   from_train = None
   to_train = None
   from_dev = None
@@ -180,9 +180,9 @@ def train():
   
   # Load vocabularies.
   en_vocab_path = os.path.join(FLAGS.data_dir,
-                               "vocab90000.from")
+                               "vocab30000.from")
   fr_vocab_path = os.path.join(FLAGS.data_dir,
-                               "vocab90000.to")
+                               "vocab30000.to")
   en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path)
   _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path)
 
@@ -212,7 +212,7 @@ def train():
 
     # This is the training loop.
     step_time, loss = 0.0, 0.0
-    current_step = 0
+    current_step = current_step * FLAGS.steps_per_checkpoint
     previous_losses = []
     while True:
       # Choose a bucket according to data distribution. We pick a random number
@@ -259,9 +259,9 @@ def decode_init(sess):
 
     # Load vocabularies.
     en_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "vocab90000.from")
+                                 "vocab30000.from")
     fr_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "vocab90000.to")
+                                 "vocab30000.to")
     en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path)
     _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path)
     return (model, fr_vocab_path, en_vocab, rev_fr_vocab, sess)
@@ -315,9 +315,9 @@ def interactive_decode():
 
     # Load vocabularies.
     en_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "vocab90000.from")
+                                 "vocab30000.from")
     fr_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "vocab90000.to")
+                                 "vocab30000.to")
     en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path)
     _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path)
 
@@ -380,7 +380,7 @@ def self_test():
       model.step(sess, encoder_inputs, decoder_inputs, target_weights,
                  bucket_id, False)
 
-def print_samples():
+def print_samples(current_step):
   # Load sample questions
   sample_file = open('dialogue_q', 'r')
   sample_talk = sample_file.readlines()
@@ -393,13 +393,13 @@ def print_samples():
 
     # Load vocabularies.
     en_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "vocab90000.from")
+                                 "vocab30000.from")
     fr_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "vocab90000.to")
+                                 "vocab30000.to")
     en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path)
     _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path)
 
-    sample_dialogue = open('dialogue_a_' + str(model.global_step.eval()), 'w')
+    sample_dialogue = open('dialogue_a_' + str(current_step * FLAGS.steps_per_checkpoint), 'w')
     for sentence in sample_talk:
       sample_dialogue.write(sentence + '\n')
 
@@ -444,9 +444,10 @@ def main(_):
   else:
     current_step = 0
     while current_step < 100:
-      train()
+      train(current_step)
       tf.reset_default_graph()
-      print_samples()
+      print_samples(current_step)
+      tf.reset_default_graph()
       current_step += 1
 
 if __name__ == "__main__":
