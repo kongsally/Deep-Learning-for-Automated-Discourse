@@ -1,4 +1,5 @@
 
+var cornell2Path = "./2layer-cornell/"
 var pos2Path = "./2layer-pos/"
 var pos3Path = "./3layer-pos/"
 var neg2Path = "./2layer-neg/"
@@ -31,6 +32,9 @@ function loadDialogues(checkptNumber) {
 	$("#pos3").empty();
 	$("#neg2").empty();
 	$("#neg3").empty();
+	$("#cornell2").empty();
+
+	loadText(cornell2Path, checkptNumber, "cornell2");
 
 	loadText(pos2Path, checkptNumber, "pos2");
 	loadText(pos3Path, checkptNumber, "pos3");
