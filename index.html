@@ -18,36 +18,39 @@
 		<h3> Checkpoint Number: </h3>
 		<h3>
 			<ul id="selectable">
-				<div class="button" onclick="loadDialogues(1000);">
-				1000</div> 
-				<div class="button" onclick="loadDialogues(5000);">
-				5000</div> 
+				<div class="button" onclick="loadDialogues(1000);">1000</div> 
+				<div class="button" onclick="loadDialogues(3000);">3000</div> 
+				<div class="button" onclick="loadDialogues(5000);">5000</div> 
+				<div class="button" onclick="loadDialogues(8000);">8000</div> 
 				<div class="button" onclick="loadDialogues(10000);">10000</div> 
+				<div class="button" onclick="loadDialogues(20000);">20000</div> 
+				<div class="button" onclick="loadDialogues(30000);">30000</div>
+				<div class="button" onclick="loadDialogues(40000);">40000</div> 
 				<div class="button" onclick="loadDialogues(50000);">50000</div>
-				<div class="button" onclick="loadDialogues(100000);">100000</div>
-				<div class="button" onclick="loadDialogues(120000);">120000</div>
 			</ul>
 		 </h3>
 	</div>
 
 	<div class="wrapper"> 
-		<div class="model-wrapper" id="cornellWrapper">
-			<h3> Cornell Movie-Dialogue 
-				<span id="cornellPerplexity"></span>
-			</h3>
-			<div id="cornell"></div>
+
+		<div class="model-wrapper" id="pos2Wrapper">
+			<h3> Positive Cornell (2 layers)</h3>
+			<div id="pos2"></div>
 		</div>
-		<div class="model-wrapper" id="cornellTwitterWrapper">
-			<h3> Cornell Movie-Dialogue + Twitter 
-				<span id="cornellTwitterPerplexity"></span>
-			</h3>
-			<div id="cornellTwitter"></div>
+
+		<div class="model-wrapper" id="pos3Wrapper">
+			<h3>Positive Cornell (3 layers)</h3>
+			<div id="pos3"></div>
 		</div>
-		<div class="model-wrapper" id="twitterWrapper">
-			<h3> Twitter 
-				<span id="twitterPerplexity"></span>
-			</h3>
-			<div id="twitter"></div>
+
+		<div class="model-wrapper" id="neg2Wrapper">
+			<h3> Negative Cornell (2 layers) </h3>
+			<div id="neg2"></div>
+		</div>
+
+		<div class="model-wrapper" id="neg3Wrapper">
+			<h3> Negative Cornell (3 layers)</h3>
+			<div id="neg3"></div>
 		</div>
 		
 	</div>
