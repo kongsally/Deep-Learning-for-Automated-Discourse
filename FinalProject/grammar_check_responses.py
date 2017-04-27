@@ -6,12 +6,18 @@ import sys
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-cornellPath = "./cornellResponses"
-twitterPath = "./twitterResponses"
-cornellTwitterPath = "./cornellTwitterResponses"
+# cornellPath = "./cornellResponses"
+# twitterPath = "./twitterResponses"
+# cornellTwitterPath = "./cornellTwitterResponses"
+
+pos2Path = "./2layer-pos"
+pos3Path = "./3layer-pos"
+neg2Path = "./2layer-neg"
+neg3Path = "./3layer-neg"
 
 tool = grammar_check.LanguageTool('en-US')
 
+checkptNumbers = ["1000", "3000", "5000", "8000", "10000", "30000", "50000"]
 
 def grammarCheckFile(filePath, checkpt):
 	for filename in glob.glob(os.path.join(filePath, 'dialogue_a_' + checkpt)):
@@ -31,11 +37,11 @@ def grammarCheckFile(filePath, checkpt):
 				newFile.write(line)
 		newFile.close()
 
-checkptNumbers = ["1000", "5000", "10000", "50000","100000", "120000"]
 
 for n in checkptNumbers:
-	grammarCheckFile(cornellPath, n)
-	grammarCheckFile(twitterPath, n)
-	grammarCheckFile(cornellTwitterPath, n)
+	grammarCheckFile(pos2Path, n)
+	grammarCheckFile(pos3Path, n)
+	grammarCheckFile(neg2Path, n)
+	grammarCheckFile(neg3Path, n)
 
 
