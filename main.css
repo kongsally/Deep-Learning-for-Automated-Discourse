@@ -6,19 +6,20 @@ body {
 
 .section {
 	text-align: center;
+  border-bottom: solid 2px #C5E3ED;
+  padding-top: 1em;
 }
 
 #header {
 	background-color: #C5E3ED;
 	color: white;
+  padding: 1em;
 }
 
-#header h2 {
+#header > h2, h3 {
 	margin: 0;
-	padding: 1em;
 	color: #385960;
 }
-
 
 #checkpointNumber {
 	margin-right: 2em;

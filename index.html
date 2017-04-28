@@ -15,11 +15,13 @@
 	</div>
 
 	<div class="section">
+	<p> The following are some results from training models using the Cornell Movie Dialogue Corpus, and subsets of the corpus. <br>Using NLTK's Vader Sentiment Analysis model, we divided the dataset into positive datasets and negative datasets. <br> The number next to each categories represent the number of hidden layers the model had </p>
+	</div>
+
+	<div class="section">
 		<h3> Checkpoint Number: </h3>
 		<h3>
 			<ul id="selectable">
-				<div class="button" onclick="loadDialogues(1000);">1000</div> 
-				<div class="button" onclick="loadDialogues(3000);">3000</div> 
 				<div class="button" onclick="loadDialogues(5000);">5000</div> 
 				<div class="button" onclick="loadDialogues(8000);">8000</div> 
 				<div class="button" onclick="loadDialogues(10000);">10000</div> 
@@ -33,28 +35,33 @@
 
 	<div class="wrapper"> 
 
-		<div class="model-wrapper" id="cornellWrapper">
-			<h3> Cornell (2 layers)</h3>
+		<div class="model-wrapper" id="cornell2Wrapper">
+			<h3> All: 2</h3>
 			<div id="cornell2"></div>
 		</div>
 
+		<div class="model-wrapper" id="cornell3Wrapper">
+			<h3> All: 3</h3>
+			<div id="cornell3"></div>
+		</div>
+
 		<div class="model-wrapper" id="pos2Wrapper">
-			<h3> Positive (2 layers)</h3>
+			<h3> Positive: 2</h3>
 			<div id="pos2"></div>
 		</div>
 
 		<div class="model-wrapper" id="pos3Wrapper">
-			<h3>Positive (3 layers)</h3>
+			<h3>Positive: 3</h3>
 			<div id="pos3"></div>
 		</div>
 
 		<div class="model-wrapper" id="neg2Wrapper">
-			<h3> Negative (2 layers) </h3>
+			<h3> Negative: 2 </h3>
 			<div id="neg2"></div>
 		</div>
 
 		<div class="model-wrapper" id="neg3Wrapper">
-			<h3> Negative (3 layers)</h3>
+			<h3> Negative: 3</h3>
 			<div id="neg3"></div>
 		</div>
 		
