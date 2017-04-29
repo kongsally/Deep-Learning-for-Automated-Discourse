@@ -1,7 +1,8 @@
 
 var cornell2Path = "./2layer-cornell/"
-var cornell3Path = "./3layer-cornell/"
+var twitterPath = "./twitter-all/"
 var pos2Path = "./2layer-pos/"
+var twitterPos2Path = "./twitter-pos/"
 var pos3Path = "./3layer-pos/"
 var neg2Path = "./2layer-neg/"
 var neg3Path = "./3layer-neg/"
@@ -33,17 +34,17 @@ function init() {
 }
 
 function loadDialogues(checkptNumber) {
-	$("#pos2").empty();
-	$("#pos3").empty();
-	$("#neg2").empty();
-	$("#neg3").empty();
-	$("#cornell2").empty();
-	$("#cornell3").empty();
+	$("#pos-cornell-2").empty();
+	$("#pos-twitter-2").empty();
+	$("#neg-cornell-2").empty();
+	$("#neg-cornell-3").empty();
+	$("#cornell").empty();
+	$("#twitter").empty();
 
-	loadText(cornell2Path, checkptNumber, "cornell2");
-	loadText(cornell3Path, checkptNumber, "cornell3");
-	loadText(pos2Path, checkptNumber, "pos2");
-	loadText(pos3Path, checkptNumber, "pos3");
-	loadText(neg2Path, checkptNumber, "neg2");
-	loadText(neg3Path, checkptNumber, "neg3");
+	loadText(cornell2Path, checkptNumber, "cornell");
+	loadText(twitterPath, checkptNumber, "twitter");
+	loadText(pos2Path, checkptNumber, "pos-cornell-2");
+	loadText(twitterPos2Path, checkptNumber, "pos-twitter-2");
+	loadText(neg2Path, checkptNumber, "neg-cornell-2");
+	loadText(neg3Path, checkptNumber, "neg-cornell-3");
 }
